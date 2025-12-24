@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+gunicorn
+python-multipart
+aioboto3
+rembg[cpu]
+torch
+open-clip
+pillow
+numpy
+open-cv
+httpx
+boto3
