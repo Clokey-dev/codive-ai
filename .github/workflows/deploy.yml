@@ -3,7 +3,7 @@ name: Deploy codive-ai-server to GCP
 on:
   push:
     branches: [ "main" ]
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
