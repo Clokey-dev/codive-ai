@@ -5,7 +5,7 @@ python-multipart
 aioboto3
 rembg[cpu]
 torch
-open-clip
+open-clip-torch
 pillow
 numpy
 open-cv
