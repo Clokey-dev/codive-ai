@@ -8,6 +8,6 @@ torch
 open-clip-torch
 pillow
 numpy
-open-cv
+opencv-python-headless
 httpx
 boto3
