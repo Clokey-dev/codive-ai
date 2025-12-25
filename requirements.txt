@@ -4,7 +4,6 @@ gunicorn
 python-multipart
 aioboto3
 rembg[cpu]
-torch
 open-clip-torch
 pillow
 numpy
