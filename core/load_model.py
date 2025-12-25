@@ -4,7 +4,9 @@ from rembg import new_session
 import torch
 import torch.nn.functional as F
 from .config import DEVICE, MODEL_NAME, PRETRAINED, CLOTH_LABELS, RECORD_LABELS ,PROMPTS
+from huggingface_hub import hf_hub_download
 
+model_path = hf_hub_download(repo_id="swwho/Fashion-YOLO", filename="fashion_2.pt")
 
 # --- 전역 변수 (Global State) ---
 GLOBAL_MODEL = None
@@ -75,7 +77,7 @@ def load_clip_model():
 
 
 
-def load_yolo_model(model_path: str = 'c://Users/swwho/Desktop/codive/models/fashion.pt'):
+def load_yolo_model(model_path: str = model_path):
     """
     YOLO 모델을 로드 함수
     """
