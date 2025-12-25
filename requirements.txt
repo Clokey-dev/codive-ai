@@ -11,3 +11,5 @@ numpy
 opencv-python-headless
 httpx
 boto3
+ultralytics
+huggingface_hub
