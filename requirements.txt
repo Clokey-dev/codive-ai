@@ -7,7 +7,6 @@ rembg[cpu]
 open-clip-torch
 pillow
 numpy
-opencv-python-headless
 httpx
 boto3
 ultralytics
