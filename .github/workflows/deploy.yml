@@ -21,7 +21,7 @@ jobs:
         username: ${{ secrets.GCP_USERNAME }}
         key: ${{ secrets.GCP_SSH_KEY }}
         script: |
-          cd /home/clokeyserver.ai/codive-ai
+          cd /home/clokeyserver_ai/codive-ai
           
           # 최신 코드 받기
           git pull origin main
