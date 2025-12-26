@@ -28,7 +28,7 @@ jobs:
           echo "HF_TOKEN=${{secrets.HF_TOKEN}}" > .env
           
           # Docker 다시 빌드 및 실행 (기존 컨테이너 교체)
-          docker compose up -d --build
+          docker-compose up -d --build
           
           # 불필요한 이미지 정리
           docker image prune -f
