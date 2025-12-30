@@ -1,3 +1,4 @@
+import os
 import open_clip
 from ultralytics import YOLO
 from rembg import new_session
@@ -6,7 +7,6 @@ import torch.nn.functional as F
 from .config import DEVICE, MODEL_NAME, PRETRAINED, CLOTH_LABELS, RECORD_LABELS ,PROMPTS
 from huggingface_hub import hf_hub_download
 
-model_path = hf_hub_download(repo_id="swwho/Fashion-YOLO", filename="fashion_2.pt")
 
 # --- 전역 변수 (Global State) ---
 GLOBAL_MODEL = None
@@ -77,7 +77,7 @@ def load_clip_model():
 
 
 
-def load_yolo_model(model_path: str = model_path):
+def load_yolo_model():
     """
     YOLO 모델을 로드 함수
     """
@@ -85,8 +85,9 @@ def load_yolo_model(model_path: str = model_path):
 
     if GLOBAL_YOLO_MODEL is not None:
         return GLOBAL_YOLO_MODEL
-
-    print(f"Loading YOLO model from: {model_path}...")
+    hf_token = os.getenv("HF_TOKEN")
+    model_path = hf_hub_download(repo_id="swwho/Fashion-YOLO", repo_type="model", filename="fashion_2.pt", token=hf_token)
+    print(f"Loading YOLO model from huggingface...")
     
     try:
         yolo_model = YOLO(model_path)
