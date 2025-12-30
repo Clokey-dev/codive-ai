@@ -3,9 +3,9 @@ from services.preprocess_service import remove_background
 from schemas.common import BaseResponse
 from schemas.input_request import BaseRequest
 
-router = APIRouter(prefix="/preprocess")
+router = APIRouter()
 
-@router.put("/remove_bg", response_model=BaseResponse)
+@router.put("/background-removals", response_model=BaseResponse)
 async def romve_image_background(request_data: BaseRequest):
     """presignedURL을 통해 이미지를 받아 배경이 제거된 깔끔한 이미지 업로드"""
     result = await remove_background(request_data.download_url, request_data.upload_url)

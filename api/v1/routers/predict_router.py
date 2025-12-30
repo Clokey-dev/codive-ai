@@ -4,11 +4,11 @@ from schemas.common import BaseResponse
 from schemas.input_request import BaseRequest, BaseBatchRequest, StyleRequest
 import core.load_model as load_model
 
-router = APIRouter(prefix="/inference")
+router = APIRouter()
 
 
 # 옷추가
-@router.post("/cloth", response_model=BaseResponse)
+@router.post("/cloth-inferences", response_model=BaseResponse)
 async def classify_cloth(request_data: BaseBatchRequest):
     """옷차림 속성 분류 엔드포인트"""
     result = await classify_image_info_batch(
@@ -30,7 +30,7 @@ async def classify_cloth(request_data: BaseBatchRequest):
 
 
 # 기록 추가
-@router.post("/record", response_model=BaseResponse)
+@router.post("/style-inferences", response_model=BaseResponse)
 async def classify_record(request_data: StyleRequest):
     """상황과 스타일 분류 엔드포인트"""
     result = await classify_image_style(
