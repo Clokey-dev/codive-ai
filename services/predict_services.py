@@ -1,5 +1,7 @@
+from typing import List
 import torch
 import torch.nn.functional as F
+import asyncio
 from PIL import Image
 import aiohttp
 import io
@@ -61,6 +63,30 @@ async def classify_image_info(download_url:str, upload_url: str, embed_type:dict
     """단일 이미지에 대한 카테고리, 색상, 계절 정보 추출"""
     async with aiohttp.ClientSession() as session:
         return await classify_info_with_session(session, download_url, upload_url, embed_type, top_k)
+
+
+async def classify_image_info_batch(download_urls:List[str], upload_urls:List[str], embed_type:dict, top_k:int=1):
+    async with aiohttp.ClientSession() as session:
+        async def classify_image_info_worker(download_url:str, upload_url:str):
+            return await classify_info_with_session(session, download_url, upload_url, embed_type, top_k)
+        
+        results = await asyncio.gather(*[
+            classify_image_info_worker(durl, uurl)
+            for durl, uurl in zip(download_urls, upload_urls)
+        ])
+    final_results = []
+    for result in results:
+        if not result["isSuccess"]:
+            return {
+                "isSuccess": False,
+                "error_code": result["error_code"]
+            }
+        final_results.append(result["result"])
+
+    return {
+        "isSuccess": True,
+        "result": final_results
+    }
 
 
 # 상황 분류 함수 구현
