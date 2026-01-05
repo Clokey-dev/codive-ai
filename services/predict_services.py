@@ -112,7 +112,10 @@ async def classify_style_with_session(session: aiohttp.ClientSession, download_u
     labels = {}
     for name, (embeds, texts) in embed_dict.items():
         logits = logit_scale * img_feats @ embeds.T
-        _, idx = logits.topk(top_k, dim=-1)
+        if name == "situations":
+            _, idx = logits.topk(1, dim=-1)
+        else:
+            _, idx = logits.topk(top_k, dim=-1)
         labels[name] = [texts[i] for i in idx.squeeze(0).tolist()]
 
     return {
