@@ -8,6 +8,7 @@ import io
 from core.s3_utils import download_image, upload_image
 import core.load_model as load_model
 from rembg import remove
+from core.config import CATEGORY_EN_TO_ID, CATEGORY_EN_TO_KO, SITUATION_EN_TO_ID, SITUATION_EN_TO_KO, STYLE_EN_TO_ID, STYLE_EN_TO_KO, SEASON_EN_TO_ID, SEASON_EN_TO_KO
 
 
 # 정보 분류 함수 구현
@@ -48,10 +49,14 @@ async def classify_info_with_session(session: aiohttp.ClientSession, download_ur
     logit_scale = load_model.GLOBAL_MODEL.logit_scale.exp()
 
     labels = {}
+
     for name, (embeds, texts) in embed_dict.items():
         logits = logit_scale * img_feats @ embeds.T
         _, idx = logits.topk(top_k, dim=-1)
-        labels[name] = [texts[i] for i in idx.squeeze(0).tolist()]
+        if name == "categories":
+            labels[name] = [{"id":CATEGORY_EN_TO_ID[texts[i]], "name":CATEGORY_EN_TO_KO[texts[i]]} for i in idx.squeeze(0).tolist()]
+        if name == "seasons":
+            labels[name] = [{"id":SEASON_EN_TO_ID[texts[i]], "name":SEASON_EN_TO_KO[texts[i]]} for i in idx.squeeze(0).tolist()]
 
     return {
         "isSuccess":True,
@@ -114,9 +119,10 @@ async def classify_style_with_session(session: aiohttp.ClientSession, download_u
         logits = logit_scale * img_feats @ embeds.T
         if name == "situations":
             _, idx = logits.topk(1, dim=-1)
+            labels[name] = [{"id":SITUATION_EN_TO_ID[texts[i]], "name":SITUATION_EN_TO_KO[texts[i]]} for i in idx.squeeze(0).tolist()]
         else:
             _, idx = logits.topk(top_k, dim=-1)
-        labels[name] = [texts[i] for i in idx.squeeze(0).tolist()]
+            labels[name] = [{"id":STYLE_EN_TO_ID[texts[i]], "name":STYLE_EN_TO_KO[texts[i]]} for i in idx.squeeze(0).tolist()]
 
     return {
         "isSuccess":True,

@@ -33,13 +33,12 @@ async def upload_image(session: aiohttp.ClientSession, url: str, image_bytes: by
                 "error_code": ErrorCode.INVALID_REQUEST
             }
         request = session.put if method == "PUT" else session.post
-        async with request(url, data=image_bytes) as response:
+        async with request(url, data=image_bytes, headers={"Content-Type": "image/jpeg"}) as response:
             if response.status in (200, 204):
                 return {"success": True}
             return {
                 "success": False,
                 "error_code": ErrorCode.S3_UPLOAD_FAILED,
-                "http_status": response.status
             }
     except Exception as e:
         return {

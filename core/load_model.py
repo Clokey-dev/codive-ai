@@ -20,7 +20,7 @@ GLOBAL_REMBG_MODEL = None
 
 # 함수 모드에 따른 임베딩 키 설정
 EMBEDS_CONFIG_KEYS = {
-    "cloth-plus": ["CATEGORIES", "COLORS", "SEASONS"],
+    "cloth-plus": ["CATEGORIES", "SEASONS"],
     "record-plus": ["STYLES", "SITUATIONS"],
 }
 

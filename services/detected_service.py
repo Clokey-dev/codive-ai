@@ -60,8 +60,8 @@ async def detect_cloth(download_url:str, upload_urls:List[str]):
             *[worker(idx, item) for idx, item in enumerate(crop_items)],
             return_exceptions=True
         )
-        uploaded_idxs = [idx for idx, r in enumerate(results) if r["success"]]
-        if not uploaded_idxs:
+        uploaded_urls = [upload_urls[idx] for idx, r in enumerate(results) if r["success"]]
+        if not uploaded_urls:
             return {
                 "success": False,
                 "error_code": ErrorCode.DETECT_BUT_UPLOAD_FAILED
@@ -71,7 +71,7 @@ async def detect_cloth(download_url:str, upload_urls:List[str]):
             "success": True,
             "result": {
                 "detected_cnt": len(crop_items),
-                "uploaded_cnt": len(uploaded_idxs),
-                "uploaded_idxs": uploaded_idxs
+                "uploaded_cnt": len(uploaded_urls),
+                "uploaded_urls": uploaded_urls
             } 
         }
