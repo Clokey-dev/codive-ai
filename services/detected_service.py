@@ -6,6 +6,7 @@ import asyncio
 from core.s3_utils import download_image, upload_image
 import core.load_model as load_model
 from schemas.common import ErrorCode
+from urllib.parse import urlparse, urlunparse
 
 async def detect_cloth(download_url:str, upload_urls:List[str]):
 
@@ -60,7 +61,13 @@ async def detect_cloth(download_url:str, upload_urls:List[str]):
             *[worker(idx, item) for idx, item in enumerate(crop_items)],
             return_exceptions=True
         )
-        uploaded_urls = [upload_urls[idx] for idx, r in enumerate(results) if r["success"]]
+        uploaded_urls = []
+        for idx, r in enumerate(results):
+            if r["success"]:
+                parsed = urlparse(upload_urls[idx])
+                clean_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, '', '', ''))
+                uploaded_urls.append(clean_url)
+
         if not uploaded_urls:
             return {
                 "success": False,

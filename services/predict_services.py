@@ -8,6 +8,7 @@ import io
 from core.s3_utils import download_image, upload_image
 import core.load_model as load_model
 from rembg import remove
+from urllib.parse import urlparse, urlunparse
 from core.config import CATEGORY_EN_TO_ID, CATEGORY_EN_TO_KO, SITUATION_EN_TO_ID, SITUATION_EN_TO_KO, STYLE_EN_TO_ID, STYLE_EN_TO_KO, SEASON_EN_TO_ID, SEASON_EN_TO_KO
 
 
@@ -57,7 +58,10 @@ async def classify_info_with_session(session: aiohttp.ClientSession, download_ur
             labels[name] = [{"id":CATEGORY_EN_TO_ID[texts[i]], "name":CATEGORY_EN_TO_KO[texts[i]]} for i in idx.squeeze(0).tolist()]
         if name == "seasons":
             labels[name] = [{"id":SEASON_EN_TO_ID[texts[i]], "name":SEASON_EN_TO_KO[texts[i]]} for i in idx.squeeze(0).tolist()]
-
+    
+    parsed = urlparse(upload_url)
+    clean_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, '', '', ''))
+    labels["uploaded_url"] = clean_url
     return {
         "isSuccess":True,
         "result": labels
